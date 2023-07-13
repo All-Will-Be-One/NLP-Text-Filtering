@@ -6,87 +6,121 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 /* normalize css ends here */
 
-
-html {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
-    color: #222;
+/* Reset some default styles */
+body {
+    background-color: #333;
+    backdrop-filter: blur(10px);
 }
 
-body {
-    width: 350px;
-    height: 300px;
+p {
+    margin: 0;
+    padding: 0;
 }
 
 .app {
-    height: 100%;
+    width: 600px;
+    background-color: #333;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    /* 使用微软雅黑字体 */
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+}
+
+#blacklist {
+    margin-bottom: 20px;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    color: rgb(180, 180, 180);
+}
+
+#blacklist div {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
+    margin-bottom: 10px;
+}
+
+#blacklist span {
+    flex: 1;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(210, 210, 210);
+}
+
+#blacklist input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+#keywordInput {
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+button {
+    background-color: rgba(0, 123, 255, 0);
+    border: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#addBtn {
+    width: 100px;
+    height: 25px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #8091a3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ddd;
 }
 
 .title {
     font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    color: #333;
 }
 
-.subtitle {
-    font-size: 12px;
-}
-
-code {
-    font-size: 12px;
-    font-family: inherit;
-    background-color: rgba(254, 237, 185, .3);
-    padding: 2px 4px;
-    border-radius: 2px;
-}
-
-.counter-label {
-    font-size: 12px;
-    margin-bottom: 5px;
-}
-
-.counter {
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.button-container {
-    margin-top: 15px;
-}
-
-.button {
-    border: 0;
+/* Emoji styling */
+.title:before,
+.title:after {
+    content: '';
     display: inline-block;
-    padding: 10px 20px;
-    margin-right: 4px;
-    margin-left: 4px;
-    background-color: bisque;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: transform .2s ease;
-    user-select: none;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
 
-.button:focus {
-    outline: none;
+::-webkit-scrollbar {
+    width: 6px;
+    /* 设置滚动条宽度 */
+    border-radius: 3px;
+    /* 设置滚动条圆角 */
 }
 
-.button:hover {
-    transform: scale(1.1);
-}
-
-.divider {
-    margin: 30px auto 25px;
-    width: 50px;
-    border: .5px dashed #000;
-    opacity: .1;
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    /* 设置滚动条滑块颜色 */
+    border-radius: 3px;
+    /* 设置滚动条滑块圆角 */
 }

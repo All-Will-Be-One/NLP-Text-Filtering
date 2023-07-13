@@ -2,111 +2,98 @@
 
 import './popup.css';
 
-(function() {
-  // We will make use of Storage API to get and store `count` value
-  // More information on Storage API can we found at
-  // https://developer.chrome.com/extensions/storage
+import { pageTypes } from './blockPageTypes.js';
+import { pageTypesCN } from './blockPageTypes.js';
 
-  // To get storage access, we have to mention it in `permissions` property of manifest.json file
-  // More information on Permissions can we found at
-  // https://developer.chrome.com/extensions/declare_permissions
-  const counterStorage = {
-    get: cb => {
-      chrome.storage.sync.get(['count'], result => {
-        cb(result.count);
-      });
-    },
-    set: (value, cb) => {
-      chrome.storage.sync.set(
-        {
-          count: value,
-        },
-        () => {
-          cb();
-        }
-      );
-    },
-  };
+let blacklistDiv = document.getElementById('blacklist');
+let keywordInput = document.getElementById('keywordInput');
+let addBtn = document.getElementById('addBtn');
 
-  function setupCounter(initialValue = 0) {
-    document.getElementById('counter').innerHTML = initialValue;
-
-    document.getElementById('incrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'INCREMENT',
-      });
-    });
-
-    document.getElementById('decrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'DECREMENT',
-      });
-    });
+function refreshBlacklist() {
+  // 清空现有列表
+  while (blacklistDiv.firstChild) {
+    blacklistDiv.firstChild.remove();
   }
 
-  function updateCounter({ type }) {
-    counterStorage.get(count => {
-      let newCount;
+  chrome.storage.sync.get(['blacklist'], function (result) {
+    let blacklist = JSON.parse(result.blacklist || "[]");
 
-      if (type === 'INCREMENT') {
-        newCount = count + 1;
-      } else if (type === 'DECREMENT') {
-        newCount = count - 1;
-      } else {
-        newCount = count;
-      }
+    // 重新添加每个关键词
+    blacklist.forEach(function (entry, index) {
+      let item = document.createElement('div');
 
-      counterStorage.set(newCount, () => {
-        document.getElementById('counter').innerHTML = newCount;
+      let keyword = document.createElement('span');
+      keyword.innerText = entry.keyword;
+      item.appendChild(keyword);
 
-        // Communicate with content script of
-        // active tab by sending a message
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-          const tab = tabs[0];
+      // 添加是否正则的checkbox
+      let isRegexpCheckbox = document.createElement('input');
+      isRegexpCheckbox.type = 'checkbox';
+      isRegexpCheckbox.checked = entry.isRegexp;
+      isRegexpCheckbox.addEventListener('change', function () {
+        entry.isRegexp = this.checked;
+        chrome.storage.sync.set({ 'blacklist': JSON.stringify(blacklist) });
+      });
+      item.appendChild(isRegexpCheckbox);
+      item.appendChild(document.createTextNode(' 正则 '));
 
-          chrome.tabs.sendMessage(
-            tab.id,
-            {
-              type: 'COUNT',
-              payload: {
-                count: newCount,
-              },
-            },
-            response => {
-              console.log('Current count value passed to contentScript file');
-            }
-          );
+      // 添加每个页面类型的checkbox
+      pageTypes.forEach(function (pageType) {
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = entry[pageType];
+        checkbox.addEventListener('change', function () {
+          entry[pageType] = this.checked;
+          chrome.storage.sync.set({ 'blacklist': JSON.stringify(blacklist) });
         });
+        item.appendChild(checkbox);
+        item.appendChild(document.createTextNode(' ' + pageTypesCN[pageType] + ' '));
       });
+
+      let removeBtn = document.createElement('button');
+      removeBtn.innerText = '🗑️';
+      removeBtn.addEventListener('click', function () {
+        // 在 blacklist 中删除该关键词
+        blacklist.splice(index, 1);
+        chrome.storage.sync.set({ 'blacklist': JSON.stringify(blacklist) });
+
+        // 重新显示 blacklist
+        refreshBlacklist();
+      });
+      item.appendChild(removeBtn);
+
+      blacklistDiv.appendChild(item);
+    });
+  });
+}
+
+addBtn.addEventListener('click', function () {
+  let keyword = keywordInput.value;
+  if (keyword) {
+    chrome.storage.sync.get(['blacklist'], function (result) {
+      let blacklist = JSON.parse(result.blacklist || "[]");
+
+      // 添加关键词到 blacklist
+      let newEntry = {
+        keyword: keyword,
+        isRegexp: false,
+      };
+
+      pageTypes.forEach(function (pageType) {
+        newEntry[pageType] = true;
+      });
+
+      blacklist.push(newEntry);
+      chrome.storage.sync.set({ 'blacklist': JSON.stringify(blacklist) });
+
+      // 重新显示 blacklist
+      refreshBlacklist();
+
+      // 清空输入框
+      keywordInput.value = '';
     });
   }
+});
 
-  function restoreCounter() {
-    // Restore count value
-    counterStorage.get(count => {
-      if (typeof count === 'undefined') {
-        // Set counter value as 0
-        counterStorage.set(0, () => {
-          setupCounter(0);
-        });
-      } else {
-        setupCounter(count);
-      }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', restoreCounter);
-
-  // Communicate with background file by sending a message
-  chrome.runtime.sendMessage(
-    {
-      type: 'GREETINGS',
-      payload: {
-        message: 'Hello, my name is Pop. I am from Popup.',
-      },
-    },
-    response => {
-      console.log(response.message);
-    }
-  );
-})();
+// 显示初始的 blacklist
+refreshBlacklist();

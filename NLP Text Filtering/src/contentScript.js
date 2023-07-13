@@ -1,43 +1,33 @@
 'use strict';
 
-// Content script file will run in the context of web page.
-// With content script you can manipulate the web pages using
-// Document Object Model (DOM).
-// You can also pass information to the parent extension.
+import $ from 'jquery';
+import { blockPageTypes } from './blockPageTypes.js';
+import { prepareRegex } from './blockFunction.js';
+import { block_blacklist } from './blockFunction.js';
 
-// We execute this script by making an entry in manifest.json file
-// under `content_scripts` property
+// Define jQuery's :containsRegex selector
+$.expr[":"].containsRegex = $.expr.createPseudo(function (arg) {
+  const regexp = new RegExp(arg, 'i');
+  return function (elem) {
+    return regexp.test($(elem).text());
+  };
+});
 
-// For more information on Content Scripts,
-// See https://developer.chrome.com/extensions/content_scripts
+chrome.storage.sync.get(['blacklist'], function (result) {
+  let blacklist = JSON.parse(result.blacklist || "[]");
+  const prepArray = prepareRegex(blacklist, blockPageTypes);
+  block_blacklist(prepArray);
 
-// Log `title` of current active web page
-const pageTitle = document.head.getElementsByTagName('title')[0].innerHTML;
-console.log(
-  `Page title is: '${pageTitle}' - evaluated by Chrome extension's 'contentScript.js' file`
-);
+  let running = false;
+  const observer = new MutationObserver(function (mutationsList, observer) {
+    if (!running) {
+      running = true;
+      requestAnimationFrame(function () {
+        block_blacklist(prepArray);
+        running = false;
+      });
+    }
+  });
 
-// Communicate with background file by sending a message
-chrome.runtime.sendMessage(
-  {
-    type: 'GREETINGS',
-    payload: {
-      message: 'Hello, my name is Con. I am from ContentScript.',
-    },
-  },
-  response => {
-    console.log(response.message);
-  }
-);
-
-// Listen for message
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'COUNT') {
-    console.log(`Current count is ${request.payload.count}`);
-  }
-
-  // Send an empty response
-  // See https://github.com/mozilla/webextension-polyfill/issues/130#issuecomment-531531890
-  sendResponse({});
-  return true;
+  observer.observe(document.body, { childList: true, subtree: true });
 });
