@@ -1,0 +1,29 @@
+@import "~bulma/css/bulma.css";
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 1em;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-item {
+    font-size: 1.2em;
+}
+
+.divider {
+    border-top: 1px solid #ddd;
+    margin: 1em 0;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+    text-align: center;
+    padding: 1em 0;
+}

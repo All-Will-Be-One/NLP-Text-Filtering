@@ -9,118 +9,93 @@
 
 /* normalize css ends here */
 
-/* Reset some default styles */
+@import "~bulma/css/bulma.css";
+
+html,
 body {
-    background-color: #333;
-    backdrop-filter: blur(10px);
+    height: 100%;
+    width: 100%;
 }
 
-p {
-    margin: 0;
-    padding: 0;
-}
-
-.app {
-    width: 600px;
-    background-color: #333;
-    margin: auto;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    font-family: "Microsoft YaHei", Arial, sans-serif;
-    /* 使用微软雅黑字体 */
-}
-
-h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: rgb(255, 255, 255);
-}
-
-#blacklist {
-    margin-bottom: 20px;
-    text-align: left;
-    max-height: 200px;
-    overflow-y: auto;
-    color: rgb(180, 180, 180);
-}
-
-#blacklist div {
+body {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+    background-color: #f5f5f585;
 }
 
-#blacklist span {
-    flex: 1;
-    font-size: 14px;
-    font-weight: bold;
-    color: rgb(210, 210, 210);
+.section {
+    padding: 0;
+    width: 100%;
 }
 
-#blacklist input[type="checkbox"] {
-    margin-left: 10px;
+.container {
+    text-align: center;
+    padding: 1rem;
+    background-color: #ffffff86;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 40rem;
 }
 
-#keywordInput {
-    width: 200px;
-    height: 30px;
-    padding: 5px;
-    font-size: 16px;
-    border-radius: 5px;
+
+.separator {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    margin-bottom: 0.1rem;
+    margin-top: 0.1rem;
 }
 
-button {
-    background-color: rgba(0, 123, 255, 0);
-    border: none;
-    margin-left: 10px;
-    margin-right: 10px;
+/*animation below*/
+
+.marquee {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
-#addBtn {
-    width: 100px;
-    height: 25px;
-    margin-left: 10px;
-    font-size: 14px;
-    color: #fff;
-    background-color: #8091a3;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.marquee__inner {
+    display: flex;
+    white-space: nowrap;
+    animation: scrolling 10s linear infinite;
 }
 
-.divider {
-    margin: 20px 0;
-    border: none;
-    border-top: 1px solid #ddd;
+.marquee__content {
+    display: inline-flex;
 }
 
-.title {
-    font-size: 18px;
-    color: #333;
+@keyframes scrolling {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-112%);
+    }
 }
 
-/* Emoji styling */
-.title:before,
-.title:after {
-    content: '';
+/*self-deleting*/
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.cursor {
     display: inline-block;
     vertical-align: middle;
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
-
-::-webkit-scrollbar {
-    width: 6px;
-    /* 设置滚动条宽度 */
-    border-radius: 3px;
-    /* 设置滚动条圆角 */
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    /* 设置滚动条滑块颜色 */
-    border-radius: 3px;
-    /* 设置滚动条滑块圆角 */
+    width: 2px;
+    height: 1em;
+    background-color: black;
+    animation: blink 1s infinite;
+    visibility: visible;
 }

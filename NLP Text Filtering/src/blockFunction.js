@@ -33,6 +33,7 @@ function block_ad() {
     // Block AD
     $("svg.bili-video-card__info--ad").parents("div.bili-video-card").hide();
     $("svg.bili-video-card__info--ad").parents("div.feed-card").hide();
+    $("div.video-page-special-card-small").hide();
 }
 
 export function block_blacklist(prepArray) {

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🙈🙉🙊 Blacklist Plus</title>
+    <link rel="stylesheet" href="options.css" />
+</head>
+
+<body>
+    <div class="app">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    🙈🙉🙊 Blacklist Plus
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="#" id="keywordManagement">
+                        Keyword Management
+                    </a>
+
+                    <a class="navbar-item" href="#" id="userManagement">
+                        User Management
+                    </a>
+
+                    <a class="navbar-item" href="#" id="durationManagement">
+                        Duration Management
+                    </a>
+
+                    <a class="navbar-item" href="#" id="feedback">
+                        Feedback
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <section id="keywordManagementSection" class="section is-hidden">
+            <div class="container">
+                <h2 class="title">Keyword Management</h2>
+                <div class="card">
+                    <div class="card-content">
+                        <div id="blacklist" class="content"></div>
+
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input id="keywordInput" class="input" type="text" placeholder="Enter keyword to block">
+                            </div>
+                            <div class="control">
+                                <button id="addBtn" class="button is-info">Block</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <div class="field has-addons">
+            <div class="control">
+                <input id="durationInput" class="input" type="text" placeholder="屏蔽时长短于__秒的视频">
+            </div>
+            <div class="control">
+                <button id="durationBtn" class="button is-info">屏蔽</button>
+            </div>
+        </div>
+
+        <hr class="divider" />
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p class="title">🙈🙉🙊</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+
+</html>

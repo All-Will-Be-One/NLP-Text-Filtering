@@ -18,6 +18,9 @@
     "webpack-merge": "^5.9.0"
   },
   "dependencies": {
-    "jquery": "^3.7.0"
+    "bulma": "^0.9.4",
+    "jquery": "^3.7.0",
+    "style-loader": "^3.3.3",
+    "vue": "^3.3.4"
   }
 }
